@@ -1,68 +1,63 @@
 #!/usr/bin/python3
-"""  Cities RestFul API """
+"""Amenities RestFul API"""
 
 from flask import Blueprint, jsonify, abort, request
 from models import storage
 from models.amenity import Amenity
 
-import json
-
-
 def init_amenities():
-    from api.v1.views import app_views
+    """Initialize Amenities API endpoints"""
 
-    @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
-    def get_all_Amenities():
-        """ Get all Amenities"""
-        amenities = []
-        for amenity in storage.all("Amenity").values():
-            amenities.append(amenity.to_dict())
+    amenities_bp = Blueprint('amenities_api', __name__)
+
+    @amenities_bp.route('/amenities', methods=['GET'], strict_slashes=False)
+    def get_all_amenities():
+        """Get all amenities"""
+        amenities = [amenity.to_dict() for amenity in storage.all(Amenity).values()]
         return jsonify(amenities)
 
-    @app_views.route('/amenities/<amenity_id>', methods=['GET'],
-                     strict_slashes=False)
+    @amenities_bp.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
     def get_amenity(amenity_id):
-        """ Get amenity """
-        amenity = storage.get("Amenity", str(amenity_id))
-        if amenity is not None:
-            return jsonify(city.to_dict())
-        abort(404)
+        """Get amenity by ID"""
+        amenity = storage.get(Amenity, amenity_id)
+        if amenity is None:
+            abort(404)
+        return jsonify(amenity.to_dict())
 
-    @app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
-                     strict_slashes=False)
+    @amenities_bp.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
     def delete_amenity(amenity_id):
-        """ Delete amenity """
-        if amenity_id is not None:
-            if storage.get("Amenity", str(amenity_id)) is not None:
-                storage.delete(storage.get("Amenity", str(amenity_id)))
-            else:
-                abort(404)
+        """Delete amenity by ID"""
+        amenity = storage.get(Amenity, amenity_id)
+        if amenity is None:
+            abort(404)
+        storage.delete(amenity)
+        storage.save()
         return jsonify({}), 200
 
-    @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+    @amenities_bp.route('/amenities', methods=['POST'], strict_slashes=False)
     def create_amenity():
-        """ Create states """
+        """Create a new amenity"""
         if not request.json:
-            return jsonify({"error": "Not a Json"}), 400
+            return jsonify({"error": "Not a JSON"}), 400
         if 'name' not in request.json:
             return jsonify({"error": "Missing name"}), 400
-        amenity = Amenity(**request.get_json())
+        amenity = Amenity(**request.json)
         storage.new(amenity)
-        return jsonify(storage.get("Amenity", amenity.id).to_dict()), 201
+        storage.save()
+        return jsonify(amenity.to_dict()), 201
 
-    @app_views.route('/amenities/<amenity_id>', methods=['PUT'],
-                     strict_slashes=False)
-    def update_amenities(amenity_id):
-        """ Update amenities """
-        if storage.get("Amenity", str(amenity_id)) is None:
+    @amenities_bp.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+    def update_amenity(amenity_id):
+        """Update amenity by ID"""
+        amenity = storage.get(Amenity, amenity_id)
+        if amenity is None:
             abort(404)
         if not request.json:
-            return jsonify({"error": "Not a Json"}), 400
-        amenity = storage.get("Amenity", str(amenity_id))
+            return jsonify({"error": "Not a JSON"}), 400
         for key, value in request.json.items():
-            if (key == 'id' and key == 'created_at' and key == 'updated_at'):
-                pass
-            else:
+            if key not in ['id', 'created_at', 'updated_at']:
                 setattr(amenity, key, value)
-        amenity.save()
-        return jsonify(storage.get("Amenity", city.city_id).to_dict()), 200
+        storage.save()
+        return jsonify(amenity.to_dict()), 200
+
+    return amenities_bp
