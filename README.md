@@ -98,7 +98,9 @@ TestBaseModel class:
 * `def test_file_storage_module_docstring(self)` - Test for the file_storage.py module docstring
 * `def test_file_storage_class_docstring(self)` - Test for the FileStorage class docstring
 
-[/test_models/test_place.py](/tests/test_models/test_place.py) - Contains the TestPlaceDoc class:
+[/test_models/test_place.py
+
+](/tests/test_models/test_place.py) - Contains the TestPlaceDoc class:
 * `def setUpClass(cls)` - Set up for the doc tests
 * `def test_pep8_conformance_place(self)` - Test that models/place.py conforms to PEP8.
 * `def test_pep8_conformance_test_place(self)` - Test that tests/test_models/test_place.py conforms to PEP8.
@@ -126,6 +128,73 @@ TestBaseModel class:
 * `def test_user_module_docstring(self)` - Test for the user.py module docstring
 * `def test_user_class_docstring(self)` - Test for the User class docstring
 
+### API Files
+
+#### `api/v1/views/` directory contains API routes and their corresponding endpoints:
+
+* [amenities.py](/api/v1/views/amenities.py) - Contains routes for Amenity objects
+  * `/amenities`: Retrieves the list of all Amenity objects
+  * `/amenities/<amenity_id>`: Retrieves a specific Amenity object by ID
+  * `/amenities/<amenity_id>` (DELETE): Deletes a specific Amenity object by ID
+  * `/places/<place_id>/amenities`: Retrieves the list of Amenity objects linked to a specific Place object
+  * `/places/<place_id>/amenities/<amenity_id>` (POST): Links an Amenity object to a Place object
+  * `/places/<place_id>/amenities/<amenity_id>` (DELETE): Unlinks an Amenity object from a Place object
+  
+* [cities.py](/api/v1/views/cities.py) - Contains routes for City objects
+  * `/states/<state_id>/cities`: Retrieves the list of all City objects linked to a specific State object
+  * `/cities/<city_id>`: Retrieves a specific City object by ID
+  * `/cities/<city_id>` (DELETE): Deletes a specific City object by ID
+  
+* [index.py](/api/v1/views/index.py) - Contains the route for the status of the API
+  * `/status`: Retrieves the status of the API
+  
+* [places.py](/api/v1/views/places.py) - Contains routes for Place objects
+  * `/cities/<city_id>/places`: Retrieves the list of all Place objects linked to a specific City object
+  * `/places/<place_id>`: Retrieves a specific Place object by ID
+  * `/places/<place_id>` (DELETE): Deletes a specific Place object by ID
+  
+* [reviews.py](/api/v1/views/reviews.py) - Contains routes for Review objects
+  * `/places/<place_id>/reviews`: Retrieves the list of all Review objects linked to a specific Place object
+  * `/reviews/<review_id>`: Retrieves a specific Review object by ID
+  * `/reviews/<review_id>` (DELETE): Deletes a specific Review object by ID
+  
+* [states.py](/api/v1/views/states.py) - Contains routes for State objects
+  * `/states`: Retrieves the list of all State objects
+  * `/states/<state_id>`: Retrieves a specific State object by ID
+  * `/states/<state_id>` (DELETE): Deletes a specific State object by ID
+  
+* [users.py](/api/v1/views/users.py) - Contains routes for User objects
+  * `/users`: Retrieves the list of all User objects
+  * `/users/<user_id>`: Retrieves a specific User object by ID
+  * `/users/<user_id>` (DELETE): Deletes a specific User object by ID
+  
+#### `/api/v1/app.py` - Contains the Flask app and configuration for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
+
+#### `/api/v1/views/__init__.py` - Initializes the blueprint for the API endpoints.
 
 ## Examples of use
 ```
@@ -148,7 +217,6 @@ EOF  all  create  destroy  help  quit  show  update
 (hbnb) show BaseModel 7da56403-cc45-4f1c-ad32-bfafeb2bb050
 ** no instance found **
 (hbnb) quit
-```
 
 ## Bugs
 No known bugs at this time. 
