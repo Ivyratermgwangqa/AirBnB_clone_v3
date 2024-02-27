@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-""" API endpoints for status and statistics"""
+#!/usr/bin/python3
+"""index.py to connect to API"""
 from api.v1.views import app_views
-from flask import jsonify
+from flask import Flask, Blueprint, jsonify
 from models import storage
-
 
 
 @app_views.route('/status')
