@@ -1,7 +1,11 @@
+#!/usr/bin/python3
+"""HTTP methods for RESTFul API"""
+
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
 from models.place import Place
+
 
 @app_views.route('/cities/<city_id>/places', methods=['GET'])
 def all_place(city_id=None):
@@ -17,6 +21,7 @@ def all_place(city_id=None):
                 list_places.append(place.to_dict())
         return jsonify(list_places)
 
+
 @app_views.route('/places/<place_id>', methods=['GET'])
 def get_places(place_id=None):
     """GET place method"""
@@ -25,6 +30,7 @@ def get_places(place_id=None):
         abort(404)
     else:
         return jsonify(place.to_dict())
+
 
 @app_views.route('/places/<place_id>', methods=['DELETE', 'PUT'])
 def place_methods(place_id=None):
@@ -45,6 +51,7 @@ def place_methods(place_id=None):
                 setattr(obj_place, k, v)
         obj_place.save()
         return jsonify(obj_place.to_dict()), 200
+
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'])
 def place_post(city_id):
