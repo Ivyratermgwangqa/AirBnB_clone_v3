@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-""" app.py file """
+"""
+This module serves as the entry point for the API application.
+It initializes the Flask app and sets up the routes and blueprints.
+"""
 import os
 from models import storage
 from flask import Flask, jsonify
