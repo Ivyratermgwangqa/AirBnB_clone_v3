@@ -1,40 +1,46 @@
-#!/usr/bin/python3
 """ holds class User"""
 import hashlib
-from os import getenv
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
 import models
+from models.base_model import BaseModel, Base
+from os import getenv
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String
+
 
 class User(BaseModel, Base):
     """Representation of a user """
-    if models.storage_t == 'db':
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'users'
-        email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
-        first_name = Column(String(128), nullable=True)
-        last_name = Column(String(128), nullable=True)
-        places = relationship("Place", backref="user")
-        reviews = relationship("Review", backref="user")
+        email = Column(String(128),
+                       nullable=False)
+        _password = Column('password',
+                           String(128),
+                           nullable=False)
+        first_name = Column(String(128),
+                            nullable=True)
+        last_name = Column(String(128),
+                           nullable=True)
+        places = relationship("Place",
+                              backref="user",
+                              cascade="all, delete-orphan")
+        reviews = relationship("Review",
+                               backref="user",
+                               cascade="all, delete-orphan")
     else:
         email = ""
-        password = ""
+        _password = ""
         first_name = ""
         last_name = ""
 
     def __init__(self, *args, **kwargs):
-        """Initializes user"""
+        """initializes user"""
         super().__init__(*args, **kwargs)
-        if kwargs.get('password'):
-            self.password = self._hash_password(kwargs['password'])
 
-    def _hash_password(self, password):
-        """Hashes the password using MD5"""
-        return hashlib.md5(password.encode()).hexdigest()
+    @property
+    def password(self):
+        return self._password
 
-    def to_dict(self):
-        """Returns a dictionary representation of the User instance"""
-        user_dict = super().to_dict()
-        user_dict.pop('password', None)  # Remove password from the dictionary
-        return user_dict
+    @password.setter
+    def password(self, pwd):
+        """hashing password values"""
+        self._password = hashlib.md5(pwd.encode()).hexdigest()
